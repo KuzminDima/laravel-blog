@@ -46,8 +46,8 @@
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
       <div class="list-group">
-        @foreach ($categories as $category)
-            <a href="#" class="list-group-item">{{ $category->name }}</a>
+        @foreach ($rootCategories as $category)
+            <a href="{{ url('category', [ 'category' => $category->id ])  }}" class="list-group-item">{{ $category->name }}</a>
         @endforeach
 
       </div>

@@ -26,4 +26,48 @@ class Category extends Node {
             ->orderBy('name')
             ->get();
     }
+
+    /**
+     * Render tree view
+     *
+     * @param $openTag
+     * @param $closeTag
+     * @param callable $render
+     * @return string
+     */
+    public static function render($openTag, $closeTag, Callable $render)
+    {
+        $html = '';
+        $level = 0;
+        $categories = self::all()->toTree();
+
+        if ($categories->count()) {
+            foreach ($categories as $category) {
+                $html .= self::renderNode($category, $render, $level);
+            }
+        }
+
+        return $openTag . $html . $closeTag;
+    }
+
+    /**
+     * Render tree node
+     *
+     * @param $node
+     * @param callable $render
+     * @return string
+     */
+    public static function renderNode($node, Callable $render, $level)
+    {
+        $html = $render($node, $level);
+        $level++;
+
+        if (isset($node['children'])) {
+            foreach ($node['children'] as $child) {
+                $html .= self::renderNode($child, $render, $level);
+            }
+        }
+
+        return $html;
+    }
 }
