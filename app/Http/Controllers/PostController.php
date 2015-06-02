@@ -1,9 +1,11 @@
 <?php namespace App\Http\Controllers;
 
 use App\Category;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Services\Message;
+use App\Services\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class PostController extends Controller {
@@ -23,9 +25,20 @@ class PostController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function create(Request $request, Post $post, Message $message)
 	{
-        return view('post/create');
+        if ($request->isMethod('post')) {
+            $validator = $post->validator($request->all());
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator->errors());
+            }
+
+            $post->create($request->all());
+            $message->success('Пост успешно создан');
+        }
+
+        return view('post/create', ['tags' => Tag::all()]);
 	}
 
 	/**
