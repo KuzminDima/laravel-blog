@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\Category;
+use App\Post;
+use Config;
 
 class CategoryController extends Controller {
 
@@ -14,7 +16,13 @@ class CategoryController extends Controller {
 
         $breadCrumbs = $category->ancestors()->get();
 
-        return view('category', [ 'categories' => $categories, 'active' => $category, 'breadCrumbs' => $breadCrumbs ]);
-	}
+        $posts = Post::getPostsByCategory($category);
 
+        return view('category', [
+            'categories' => $categories,
+            'active' => $category,
+            'breadCrumbs' => $breadCrumbs,
+            'posts' => $posts->paginate(Config::get('constants.pageSize'))
+        ]);
+	}
 }

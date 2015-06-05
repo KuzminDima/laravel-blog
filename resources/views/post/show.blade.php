@@ -8,13 +8,12 @@
         @foreach ($breadCrumbs as $category)
             <li><a href="{{ url('category', [ 'category' => $category->id ])  }}">{{ $category->name }}</a></li>
         @endforeach
-        <li>{{ $active->name }}</li>
+        <li><a href="{{ url('category', [ 'category' => $active->id ])  }}">{{ $active->name }}</a></li>
       </ol>
 
-      @foreach($posts as $post)
-        <div class="blog-post">
-            <h2 class="blog-post-title"><a href="{{ url('post/show', [ 'id' => $post->id ]) }}">{{ $post->name }}</a></h2>
-            <p class="blog-post-meta">{{ $post->user->name }} - {{ $post->created_at }}</p>
+      <div class="blog-post">
+          <h2 class="blog-post-title"><a href="{{ url('post/show', [ 'id' => $post->id ]) }}">{{ $post->name }}</a></h2>
+           <p class="blog-post-meta">{{ $post->user->name }} - {{ $post->created_at }}</p>
             <p class="blog-post-meta"><strong>Категория:</strong>&nbsp;<a href="{{ url('category', [ 'id' => $post->category->id])  }}"><span class="label label-primary">{{ $post->category->name }}</span></a></p>
             <p class="blog-post-meta">
                 <strong>Теги:</strong>&nbsp;
@@ -23,12 +22,9 @@
                 @endforeach
             </p>
 
-            <p>{{ mb_substr(strip_tags($post->content), 0, 1000, 'utf-8') }}... <a href="{{ url('post/show', [ 'id' => $post->id ]) }}">Подробнее >></a></p>
+            <p>{!! $post->content !!}</p>
             <hr>
         </div>
-      @endforeach
-
-      <?php echo $posts->render(); ?>
     </div>
 
 

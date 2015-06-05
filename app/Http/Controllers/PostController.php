@@ -10,7 +10,13 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller {
 
-	/**
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => 'create']);
+    }
+
+    /**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
@@ -38,17 +44,7 @@ class PostController extends Controller {
             $message->success('Пост успешно создан');
         }
 
-        return view('post/create', ['tags' => Tag::all()]);
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
+        return view('post/create', [ 'tags' => Tag::all() ]);
 	}
 
 	/**
@@ -59,7 +55,26 @@ class PostController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+		$breadCrumbs = [];
+        $categories = [];
+
+        $post = \App\Post::with(['tags', 'category'])
+            ->whereId($id)
+            ->first()
+        ;
+
+        if ($post && $post->category) {
+            $categories = Category::getCategories($post->category->id);
+
+            if ( ! $categories->count()) {
+                $categories = Category::getCategories($post->category->getParentId());
+            }
+
+            $breadCrumbs = $post->category->ancestors()->get();
+        }
+
+
+        return view('post/show', [ 'post' => $post, 'categories' => $categories, 'active' => $post->category, 'breadCrumbs' => $breadCrumbs, ]);
 	}
 
 	/**

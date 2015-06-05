@@ -11,38 +11,23 @@
         <p>Тестовое задание на Laravel Framework 5</p>
       </div>
       <div class="row">
-        <div class="col-xs-6 col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
-        </div><!--/.col-xs-6.col-lg-4-->
-        <div class="col-xs-6 col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
-        </div><!--/.col-xs-6.col-lg-4-->
-        <div class="col-xs-6 col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
-        </div><!--/.col-xs-6.col-lg-4-->
-        <div class="col-xs-6 col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
-        </div><!--/.col-xs-6.col-lg-4-->
-        <div class="col-xs-6 col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
-        </div><!--/.col-xs-6.col-lg-4-->
-        <div class="col-xs-6 col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
-        </div><!--/.col-xs-6.col-lg-4-->
-      </div><!--/row-->
-    </div><!--/.col-xs-12.col-sm-9-->
+        @foreach($lastPosts as $post)
+            <div class="col-xs-6 col-lg-4">
+              <h2>{{ mb_substr($post->name, 0, 40, 'utf-8')  }}...</h2>
+              @if ($post->tags)
+              <p><a href="{{ url('category', [ 'id' => $post->category->id]) }}"><span class="label label-primary">{{ $post->category->name }}</span></a></p>
+              <p>
+                @foreach($post->tags as $tag)
+                    <span class="label label-success">{{ $tag->name  }}</span>
+                @endforeach
+              </p>
+              @endif
+              <p>{{ mb_substr(strip_tags($post->content), 0, 120, 'utf-8') }}...</p>
+              <p><a class="btn btn-default" href="{{ url('post/show', [ 'id' => $post->id ]) }}" role="button">Подробнее »</a></p>
+            </div>
+        @endforeach
+      </div>
+    </div>
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
       <div class="list-group">
@@ -51,6 +36,6 @@
         @endforeach
 
       </div>
-    </div><!--/.sidebar-offcanvas-->
+    </div>
   </div>
 @endsection

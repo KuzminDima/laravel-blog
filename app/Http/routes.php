@@ -18,6 +18,7 @@ Route::get('home', 'HomeController@index');
 Route::get('category/{category}', 'CategoryController@index');
 
 Route::match(['get', 'post'], 'post/create', 'PostController@create');
+Route::get('post/show/{id}', 'PostController@show');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

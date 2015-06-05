@@ -70,4 +70,5 @@ class Category extends Node {
 
         return $html;
     }
+
 }
