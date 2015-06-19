@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Category;
+use App\Comment;
 use App\Http\Controllers\Controller;
 
 use App\Services\Message;
@@ -15,16 +16,6 @@ class PostController extends Controller {
     {
         $this->middleware('auth', ['only' => 'create']);
     }
-
-    /**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
-	}
 
 	/**
 	 * Show the form for creating a new resource.
@@ -57,6 +48,7 @@ class PostController extends Controller {
 	{
 		$breadCrumbs = [];
         $categories = [];
+        $comments = [];
 
         $post = \App\Post::with(['tags', 'category'])
             ->whereId($id)
@@ -71,10 +63,11 @@ class PostController extends Controller {
             }
 
             $breadCrumbs = $post->category->ancestors()->get();
+            $comments = Comment::findCommentsByPost($post);
         }
 
 
-        return view('post/show', [ 'post' => $post, 'categories' => $categories, 'active' => $post->category, 'breadCrumbs' => $breadCrumbs, ]);
+        return view('post/show', [ 'post' => $post, 'categories' => $categories, 'active' => $post->category, 'breadCrumbs' => $breadCrumbs, 'comments' => $comments ]);
 	}
 
 	/**

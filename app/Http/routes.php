@@ -20,6 +20,8 @@ Route::get('category/{category}', 'CategoryController@index');
 Route::match(['get', 'post'], 'post/create', 'PostController@create');
 Route::get('post/show/{id}', 'PostController@show');
 
+Route::match(['post'], 'comment/create', 'CommentController@create');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

@@ -24,6 +24,36 @@
 
             <p>{!! $post->content !!}</p>
             <hr>
+
+            @if ($comments)
+              <h3>Комментарии ({{ count($comments)  }}):</h3>
+              @foreach($comments as $comment)
+                  <blockquote>
+                      <p>{{ $comment->comment }}</p>
+                      <footer><strong>Дата:</strong> {{ $comment->created_at  }} <strong>Автор:</strong> {{ $comment->user->name  }}</footer>
+                  </blockquote>
+              @endforeach
+            @endif
+
+            @if (Request::user())
+                <form method="POST" action="{{ url('comment/create') }}">
+                    @if(Session::has('message'))
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+                    @endif
+
+                    <p class="error">{{ $errors->first('comment') }}</p>
+                    <div class="form-group">
+                        <textarea name="comment" class="form-control" rows="3" placeholder="Введите текст комментария (не более 255 символов)"></textarea>
+                    </div>
+
+                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Комментировать</button>
+                    </div>
+                </form>
+            @endif
         </div>
     </div>
 

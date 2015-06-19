@@ -24,7 +24,8 @@ class Handler extends ExceptionHandler {
 	 */
 	public function report(Exception $e)
 	{
-		return parent::report($e);
+		var_dump($e->__toString());exit;
+        return parent::report($e);
 	}
 
 	/**
